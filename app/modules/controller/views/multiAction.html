@@ -1,0 +1,53 @@
+{% set navpos = "ctrls" %}
+{% set RenderScript = "True" %}
+{% extends "master.html" %}
+{% block htmlhead %}{% endblock %}
+
+{% block body %}
+<div class="col-md-12">
+<textarea id="textarea_input" class="hide">
+### 单控制器多个方法的示例
+#### 路由配置
+```js
+exports.routers = [
+    {prefix:"multiAction.html", ctrl:"Controller1", method:["GET"], action:["one", "two", "three"]}
+]
+```
+这个配置说明当路由命中后，会依次执行Controller1控制器中的action方法,one->two->three
+
+
+#### 控制器文件
+```js
+//Controller1.js
+let checkNext = false;
+module.exports = {
+    one ( req, res ,next){
+        //这里是第一方法入口，假如满足条件则继续往下进行
+        if( !req.query.p ){
+            return res.send("未指定参数 p")
+        }
+        if( req.query.p !== "one"){
+            return res.send("参数 p 不等one")
+        }
+        //将控制权交给下一个函数 two
+        next()
+    },
+
+    two ( req, res ,next){
+        //一切都很顺利，继续向下走
+        checkNext = true;
+        next()
+    },
+
+    three ( req, res ,next){
+        if( !checkNext ){
+            return res.send("不可以直接访问我")
+        }
+        res.render("multiAction")
+    }
+}
+```
+</textarea>
+{{ super() }}
+</div>
+{% endblock %}

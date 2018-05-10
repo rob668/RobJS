@@ -1,0 +1,56 @@
+{% set navpos = "login" %}
+{% set containerClass = "container" %}
+{% extends "master.html" %}
+
+{% block body %}
+<div class="col-md-6 col-sm-offset-3">
+    <div class="row"><h2>Sign in</h2><hr></div>
+    <br>
+        <div class="form-group">
+            <label for="txtemail">Email address</label>
+            <input type="email" class="form-control" id="txtemail" name="txtemail" placeholder="Email" value="test@test.com">
+        </div>
+        <div class="form-group">
+            <label for="txtpsw">Password</label>
+            <input type="password" class="form-control" id="txtpsw" name="txtpsw" placeholder="Password">
+        </div>
+        <div class="checkbox">
+            <label> <input type="checkbox"> Check me out </label>
+        </div>
+        <input type="hidden" id="_csrf" name="_csrf" value="{{csrfToken}}">
+        <button type="button" class="btn btn-default" id="btnLogin">Sign in</button>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#btnLogin").click(function(){
+            if( $("#txtpsw").val() == "" ){
+                alert("请输入密码")
+                return;
+            }
+            $.ajax({
+                "method":"POST",
+                "url": "/user/loginsrv",
+                "beforeSend": function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader('csrf-token', $("#_csrf").val());
+                },
+                "data":{
+                    "email":$("#txtemail").val(),
+                    "pwd":$("#txtpsw").val()
+                },
+                "success":function(data){
+                    if( data == 1 ){
+                        location.href="/user/my.html"
+                    }else{
+                        alert('Incorrect username or password!')
+                    }
+
+                },
+                "error":function(){
+                    alert('error!')
+                }
+            })
+        })
+    })
+</script>
+{% endblock %}

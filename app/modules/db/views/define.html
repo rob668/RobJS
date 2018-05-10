@@ -1,0 +1,64 @@
+{% set navpos = "db" %}
+{% set RenderScript = "True" %}
+{% extends "master.html" %}
+
+{% block body %}
+<div class="col-md-12">
+<textarea id="textarea_input" class="hide">
+### 数据模型定义
+
+```js
+//定义用户数据模型
+class User extends APP.DB.DBModel{
+
+    constructor(){
+        super()
+        //指定表名
+        this.tableName = "user"
+
+        this.fields = {
+            // 默认会以id做主键，这里可以不用额外指定
+            // id:{ type: "int", allowNull: false, primaryKey: true},
+            name: {type: "varchar(64)", allowNull: false, comment: "用户名"},
+            sex: {type: "varchar(4)", defaultValue: "保密"},
+            score: { type: "int(11)", defaultValue: 0, comment: "积分" },
+            status: { type: "tinyint(1)", defaultValue: 0 },
+            register_date:{type:"datetime"},
+            .....
+
+
+        }
+
+        //定义方法
+        name (){
+            ....
+        }
+    }
+}
+
+//导出并注册模型
+module.exports = APP.DB.regModel({"User": User})
+```
+
+### APP.DB.DBModel
+所有的模型定义都需要继承 APP.DB.DBModel 类
+DBModel 封装了一些基础方法，目前主要有以下方法：
+- **getone**
+查询单条记录，会自动加上  LIMIT 1
+- **query**
+执行查询操作
+- **raw**
+- **delete**
+删除某条记录
+- **getcount**
+获取总数，类似于 select count(*) from
+
+继承 DBModel 后，还可以直接使用SequelizeJS提供的方法
+
+## 参考
+- [控制器](/db/index.html)
+- [数据模型定义](/db/define.html)
+</textarea>
+{{ super() }}
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% set navpos = "db" %}
+{% set RenderScript = "True" %}
+{% extends "master.html" %}
+
+{% block body %}
+<div class="col-md-12">
+<textarea id="textarea_input" class="hide">
+#### 数据模型定义
+- 我们首先在模块目录下新建一个models目录，用于存放模型文件
+- 在models下新建 user.js 模型文件
+
+```js
+//user.js 定义一个user模型类，需要继承框架里的DBModel
+class Users extends APP.DB.DBModel{
+
+    constructor(){
+        super()
+        //如果不指定tableName，则会以类名 Users 作为表名（会转成小写）
+        this.tableName = "user"
+
+        this.fields = {
+            name: {type: "int(11)"},
+            pwd: {type: "int(11)"},
+            last_seen: {type: "int(11)"}
+        }
+    }
+}
+//导出多个模型
+class UsersGroup extends APP.DB.DBModel{
+    constructor(){
+        super()
+
+        this.tableName = "users_group"
+
+        this.fields = {
+            userid: {type: "int(11)"},
+            groupid: {type: "tinyint(1)"}
+        }
+    }
+}
+
+//这里需要调用 regModel 方法，将模型注册到框架中
+module.exports = APP.DB.regModel({
+    //这里可以指定别名，访问时请使用别名访问
+    "UserModel": Users,
+    "UsersGroupModel": UsersGroup
+})
+```
+[更多说明](/db/define.html)
+
+#### 使用数据模型
+一般情况下，我们在服务层使用数据模型，这没有强制要求，我们也可以在控制器调用数据模型
+
+```js
+//user/servs/index.js
+
+const models = require("../models")
+
+module.exports = {
+
+    async login (email, pwd){
+
+        //验证用户名和密码
+        var m_user = models.UserModel;
+        let u = await m_user.getone({where: {"email": email}})
+        if( u == null ) return 0;
+
+        //判断密码
+        let p = u.pwd;
+        /*
+            if( p == pwd ){}
+            something to code
+        */
+        return 1;
+    }
+}
+```
+#### 给模型添加方法
+我们可以给模型添加自定义的方法，示例如下：
+```js
+class Users extends APP.DB.DBModel{
+
+    constructor(){
+        super()
+
+        this.tableName = "user"
+        this.fields = {
+            name: {type: "int(11)"},
+            pwd: {type: "int(11)"},
+            last_seen: {type: "int(11)"}
+        }
+
+        //添加一个获取用户列表的方法
+        getUserList (pars) {
+            let condition = {
+                //返回的字段
+                attributes: ['username', 'sex', 'id', 'address'],
+                limit: 10
+            }
+            return this.query(condition)
+        }
+
+        //获取用户详细信息
+        getDetail(id){
+            let condition = {
+                //返回的字段
+                attributes: ['username', 'sex', 'id', 'address'],
+                //查询的条件
+                where: { id: id }
+            }
+            return this.getone(condition);
+        }
+
+        //判断用户是否在组内
+        async userInGroup(gid, uid){
+            let GroupModel = APP.DB.getModel('UsersGroupModel')
+            let isExist = GroupModel.getone({where:{"userid": uid, "id":gid}})
+
+            return isExist != null
+        }
+
+    }
+}
+```
+
+#### 模型自定义方法调用
+```js
+var m_user = models.UserModel;
+
+//调用 UserModel 里的userInGroup方法
+m_user.userInGroup(1, 1)
+
+m_user.getUserList({...})
+
+m_user.getDetail(1)
+
+```
+
+### 执行原生SQL语句
+```
+var sql = "select * from user";
+
+//使用 execSql 方法执行原生语句
+var q = APP.DB.execSql( sql );
+```
+
+### 说明
+ORM采用的是[Sequelizejs](http://docs.sequelizejs.com)做底层，框架对其做了部分封装，大部分用法与 Sequelizejs 相同，也可以直接使用 Sequelizejs中的方法
+
+## 参考
+- [控制器](/db/index.html)
+- [数据模型定义](/db/define.html)
+</textarea>
+{{ super() }}
+</div>
+{% endblock %}

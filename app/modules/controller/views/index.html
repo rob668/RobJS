@@ -1,0 +1,78 @@
+{% set navpos = "ctrls" %}
+{% set RenderScript = "True" %}
+{% extends "master.html" %}
+{% block htmlhead %}
+<link rel="stylesheet" type="text/css" href="css/test.css">
+<script src="test.js"></script>
+{% endblock %}
+
+
+{% block body %}
+<div class="col-md-12">
+<textarea id="textarea_input" class="hide">
+### 控制器说明
+控制器 controller 是业务入口文件，路由规则中的action定义，它必须写在ctrls目录下
+通常在controllers中主要负责与后台逻辑做连接工作，所以这部分可以只做简单参数的验证，传参和调服务等
+
+
+### 示例代码
+路由配置
+```js
+exports.routers = [
+    //登录页面
+    { prefix:"/login.html",  ctrl:"UserController", action:"login" },
+    //登录服务API
+    { prefix:"/loginsrv", ctrl:"UserController",  method:['POST'], action:"loginsrv"}
+]
+```
+控制器代码
+```js
+// user/ctrls/UserController.js
+
+//引入服务层文件
+const servs = require("../servs")
+
+module.exports = {
+
+    //如果在路由器配置中未指定action 则会默认执行init(如果有定义)
+    // init : function (req, res) {
+    // },
+
+    //定义一个名为 login 的 action
+    login (req, res) {
+        //如果已登录就跳到 my.html 页面
+        if(req.session.loginUser){
+            res.redirect('/my.html')
+        }
+        //否则显示登录页面
+        else {
+            res.render('login')
+        }
+    },
+
+    //定义 login API 服务
+    loginsrv( req, res ){
+        //这里获取参数和做相关处理
+        let email = req.body.email;
+        let pwd = req.body.pwd;
+        if( !email || !pwd ){
+            return  res.json({"status":0})
+        }
+        //参数处理...
+
+        //调用服务
+        let result = servs.login(email, pwd);
+        /*
+            something to code
+        */
+
+        res.json({"status":result})
+    },
+}
+```
+#### 参考：
+[数据模型](/db/index.html)
+</textarea>
+{{ super() }}
+</div>
+{% endblock %}

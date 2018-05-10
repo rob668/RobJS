@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Nodejs 模块化框架实践</title>
+    <meta name="description" content="Nodejs 模块化框架实践">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <style>pre{color:#000}</style>
+    {% block htmlhead %}{% endblock %}
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Nodejs Frame Practice</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li{%if not navpos%} class="active"{%endif%}>
+                        <a href="/index.html">Index
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li{%if navpos=="router"%} class="active"{%endif%}><a href="/router/index.html">Router</a></li>
+                    <li{%if navpos=="ctrls"%} class="active"{%endif%}><a href="/ctrl/index.html">Controller</a></li>
+                    <li{%if navpos=="db"%} class="active"{%endif%}><a href="/db/index.html">DB</a></li>
+                    <li{%if navpos=="about"%} class="active"{%endif%}><a href="/about">About</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {%if loginUser%}
+                    <li{%if navpos=="my"%} class="active"{%endif%}><a href="/user/my.html">Hi,{{loginUser}}</a></li>
+                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="/user/logout.html">Logout</a></li>
+                    {%else%}
+                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="/user/login.html">Sign in</a></li>
+                    {%endif%}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+    <div class="{{containerClass|default('container-fluid')}}">
+        {% block body %}
+        <div id="preview-rendered" class="preview-rendered"></div>
+        {% endblock %}
+    </div>
+    {%if RenderScript %}
+    <script src="/js/marked.min.js"></script>
+    <link href="/js/highlightjs/styles/github.css" rel="stylesheet">
+    <script src="/js/highlightjs/highlight.pack.min.js"></script>
+    <script type="text/javascript">
+        var rendered = document.getElementById("preview-rendered");
+        var markedOptions = {
+            gfm: true,
+            pedantic: false,
+            sanitize: false,
+            tables: true,
+            smartLists: true,
+            breaks: true,
+            langPrefix: 'language-',
+            //math: mathify,
+            highlight: function(codeText, codeLanguage) {
+                return highlightSyntax(
+                    rendered.ownerDocument,
+                        hljs,
+                        codeText,
+                        codeLanguage);
+                }
+            };
+            // Adapted from markdown-render.js
+            function highlightSyntax(targetDocument, syntaxHighlighter, codeText, codeLanguage) {
+                var codeElem, preElem, textNode;
+
+                // highlight.js requires a `<code>` element to be passed in that has a
+                // `<pre>` parent element.
+
+                preElem = targetDocument.createElement('pre');
+                codeElem = targetDocument.createElement('code');
+                textNode = targetDocument.createTextNode(codeText);
+                codeElem.appendChild(textNode);
+                preElem.appendChild(codeElem);
+
+                // If we're told the language, set it as a class so that the highlighter
+                // doesn't have to guess it. This is part of the HTML5 standard. See:
+                // http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-code-element
+                if (codeLanguage && codeLanguage.length > 0) {
+                    codeElem.setAttribute('class', 'language-'+codeLanguage);
+                }
+                else {
+                    codeElem.setAttribute('class', 'no-highlight');
+                }
+
+                syntaxHighlighter.highlightBlock(codeElem);
+
+                return codeElem.innerHTML;
+            }
+            var html = marked(document.getElementById("textarea_input").value, markedOptions);
+            rendered.innerHTML = html;
+    </script>
+    {%endif%}
+    {% block footer %}{% endblock %}
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
