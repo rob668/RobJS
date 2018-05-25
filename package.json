@@ -9,7 +9,7 @@
   "author": "Rob",
   "license": "ISC",
   "dependencies": {
-    "express-moduledev": "^1.0.3",
+    "express-moduledev": "^1.0.8",
     "session-file-store": "^1.2.0"
   }
 }

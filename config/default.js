@@ -1,3 +1,6 @@
+var session = require('express-session');
+var FileStore = require('session-file-store')(session)
+
 class Config{
 
     constructor(){
@@ -15,8 +18,14 @@ class Config{
             "dialect": "mysql"
         };
 
-        //指定控制器目录
-        this.controllerPathName = "ctrls";
+        //配置session_store
+        this.session_store = {
+            "secret": 'skdf093ks',
+            "cookie": {  maxAge: 1000 * 60 * 60 * 24 * 1 },
+            "resave": true,
+            "saveUninitialized": false,
+            "store":new FileStore
+        }
     }
 }
 

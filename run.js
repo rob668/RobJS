@@ -1,21 +1,14 @@
 var em = require('express-moduledev');
-//var RedisStore = require('connect-redis')(em.session);
-var FileStore = require('session-file-store')(em.session);
 
 var config = {
+    //指定端口，默认端口 8000
+    "port":801,
     //使用环境 'default','development','production','testing'
-    "use_env": "development",
+    "use_env": "default",
     //顶级路由存放目录名称 默认routes
     //"router":"routes/",
-    "session_store": {
-	    "secret": 'skdf093ks',
-	    "cookie": {  maxAge: 1000 * 60 * 60 * 24 * 1 },
-	    "resave": true,
-	    "saveUninitialized": false,
-	    "store": new FileStore
-    }
 }
 
+//启动服务
 em.Run(config)
 em.log.p('server runing..')
-
