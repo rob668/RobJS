@@ -7,7 +7,7 @@
     <title>Nodejs 模块化框架实践</title>
     <meta name="description" content="Nodejs 模块化框架实践">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{BaseUrl}}css/bootstrap.min.css">
     <style>pre{color:#000}</style>
     {% block htmlhead %}{% endblock %}
 </head>
@@ -25,7 +25,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Nodejs Frame Practice</a>
+                <a class="navbar-brand" href="{{BaseUrl}}">Nodejs Frame Practice</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -36,17 +36,17 @@
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li{%if navpos=="router"%} class="active"{%endif%}><a href="/router/index.html">Router</a></li>
-                    <li{%if navpos=="ctrls"%} class="active"{%endif%}><a href="/ctrl/index.html">Controller</a></li>
-                    <li{%if navpos=="db"%} class="active"{%endif%}><a href="/db/index.html">DB</a></li>
-                    <li{%if navpos=="about"%} class="active"{%endif%}><a href="/about">About</a></li>
+                    <li{%if navpos=="router"%} class="active"{%endif%}><a href="{{BaseUrl}}router/index.html">Router</a></li>
+                    <li{%if navpos=="ctrls"%} class="active"{%endif%}><a href="{{BaseUrl}}ctrl/index.html">Controller</a></li>
+                    <li{%if navpos=="db"%} class="active"{%endif%}><a href="{{BaseUrl}}db/index.html">DB</a></li>
+                    <li{%if navpos=="about"%} class="active"{%endif%}><a href="{{BaseUrl}}about">About</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {%if loginUser%}
-                    <li{%if navpos=="my"%} class="active"{%endif%}><a href="/user/my.html">Hi,{{loginUser}}</a></li>
-                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="/user/logout.html">Logout</a></li>
+                    <li{%if navpos=="my"%} class="active"{%endif%}><a href="{{BaseUrl}}user/my.html">Hi,{{loginUser}}</a></li>
+                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="{{BaseUrl}}user/logout.html">Logout</a></li>
                     {%else%}
-                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="/user/login.html">Sign in</a></li>
+                    <li{%if navpos=="login"%} class="active"{%endif%}><a href="{{BaseUrl}}user/login.html">Sign in</a></li>
                     {%endif%}
                 </ul>
             </div>
@@ -59,9 +59,9 @@
         {% endblock %}
     </div>
     {%if RenderScript %}
-    <script src="/js/marked.min.js"></script>
-    <link href="/js/highlightjs/styles/github.css" rel="stylesheet">
-    <script src="/js/highlightjs/highlight.pack.min.js"></script>
+    <script src="{{BaseUrl}}js/marked.min.js"></script>
+    <link href="{{BaseUrl}}js/highlightjs/styles/github.css" rel="stylesheet">
+    <script src="{{BaseUrl}}js/highlightjs/highlight.pack.min.js"></script>
     <script type="text/javascript">
         var rendered = document.getElementById("preview-rendered");
         var markedOptions = {

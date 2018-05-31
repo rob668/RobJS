@@ -26,6 +26,30 @@ class Config{
             "saveUninitialized": false,
             "store":new FileStore
         }
+
+        //自定义变量
+        this.BaseUrl = "/"
+
+        //配置日志信息
+        //this.log4js = false //不需要日志
+        this.log4js = {
+            appenders: {
+                out: {
+                    type: 'stdout'
+                },
+                app: {
+                    type: "dateFile",
+                    filename: 'logs/log',
+                    pattern: "_yyyyMMdd.log",
+                    alwaysIncludePattern: true,
+                    maxLogSize: 20480,
+                    backups: 3,
+                }
+            },
+            categories: {
+                default: { appenders: ['out','app'], level: 'info' }
+            }
+        }
     }
 }
 
