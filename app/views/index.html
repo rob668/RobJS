@@ -63,28 +63,142 @@ npm i express-moduledev
 ```javascript
 //run.js
 var em = require('express-moduledev');
-//指定seesion存储类型
-//var RedisStore = require('connect-redis')(em.session);
-var FileStore = require('session-file-store')(em.session);
 
-//配置启动环境参数等
 var config = {
-    "port":8000,
+    //指定端口，默认端口 8000
+    //"port":80,
     //使用环境 'default','development','production','testing'
-    "use_env": "development",
+    "use_env": "default",
     //顶级路由存放目录名称 默认routes
     //"router":"routes/",
-    "session_store": {
-        "secret": 'a345bc!',
-        "cookie": {  maxAge: 1000 * 60 * 60  },
-        "resave": true,
-        "saveUninitialized": false,
-        "store": new FileStore
-    }
 }
-//运行
+
+//启动服务
 em.Run(config)
 em.log.p('server runing..')
+```
+
+### 配置文件
+```js
+//这里使用了类的形式来定义配置
+//config/default.js
+var session = require('express-session');
+var FileStore = require('session-file-store')(session)
+//var em = require('express-moduledev');
+//var FileStore = require('session-file-store')(em.session)
+
+class Config{
+    constructor(){
+        //是否开启调试模式
+        this.debug = false;
+        //数据库连接配置
+        this.database = {
+            "host": "127.0.0.1",
+            "port": "3306",
+            "database": "test",
+            "username": "root",
+            "password": "root",
+            "dialect": "mysql"
+        };
+
+        //配置session_store
+        this.session_store = {
+            "secret": 'skdf093ks',
+            "cookie": {  maxAge: 1000 * 60 * 60 * 24},
+            "resave": true,
+            "saveUninitialized": false,
+            "store":new FileStore
+        };
+
+        //配置日志信息
+        //this.log4js = false //关闭日志
+        this.log4js = {
+            appenders: {
+                out: {
+                    type: 'stdout'
+                },
+                app: {
+                    type: "dateFile",
+                    filename: 'logs/log',
+                    pattern: "_yyyyMMdd.log",
+                    alwaysIncludePattern: true,
+                    maxLogSize: 20480,
+                    backups: 3,
+                }
+            },
+            categories: {
+                default: { appenders: ['out','app'], level: 'info' }
+            }
+        }
+    }
+}
+
+module.exports = Config;
+
+//开发环境文件
+//config/development.js
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session)
+
+var Config = require('./default');
+//这里需要继承Config
+class Development extends Config{
+    constructor(){
+        super();
+        this.debug = true;
+         this.database = {
+             ....
+         }
+        //配置session_store
+        this.session_store = {
+            "secret": 'skdf093ks',
+            "cookie": {  maxAge: 1000 * 60 * 60 * 24 },
+            "resave": true,
+            "saveUninitialized": false,
+            "store":new RedisStore({
+                "host": '127.0.0.1',
+                "port": '6300'
+            })
+        }
+    }
+}
+module.exports = Development;
+
+...
+```
+可以通过 em.config 获取配置选项
+
+## 桥接文件
+有时我们需要加载自己的通用函数库，或者对模板进行扩展，可以通过桥接文件实现，在 app下新建bridge目录，该目录下的文件会自动加载（支持多目录多文件）
+```javascript
+//app/bridge/templateExt.js
+
+//对nunjucks模板扩展方法
+module.exports.tpl  = { //这里的 tpl 名字可以自己定义
+
+    //init将自动执行
+    init (app){
+        //获取配置信息
+        let envcfg = app.config.getEnv();
+        //获取模板对象
+        let tpl = app.get('tpl');
+        //添加一个模板全局变量
+        tpl.addGlobal("BaseUrl", envcfg.BaseUrl)
+        //添加一个日期过滤器
+        tpl.addFilter('formatTimestamp', function(t, f="yyyy-MM-dd HH:mm:ss"){
+            return new Date(t*1000).pattern(f)
+        })
+    }
+}
+
+//app/bridge/Comm.js
+//通用库文件
+module.exports.comm = {
+    test (){ }
+}
+
+//通过全局APP调用方法
+APP.comm.test()
 ```
 
 ### 路由的封装
@@ -107,12 +221,12 @@ exports.routers = [
     { prefix:"/index.html",  ctrl:"RouterController", action:"index" }
 ]
 ```
-请参考：[路由配置](/router/index.html)
+请参考：[路由配置](router/index.html)
 
 ### ORM的封装
 ORM 底层使用了SequelizeJS，我对数据模型的定义做了一层封装，让数据定义更简单一点，同时我们可以对数据库模型添加方法，方便使用。
 
-请参考：[数据模型定义](/db/index.html)
+请参考：[数据模型定义](db/index.html)
 
 ### 框架源码
 https://github.com/rob668/express-moduledev

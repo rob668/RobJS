@@ -3,6 +3,7 @@ const models = require("../models")
 
 module.exports = {
 
+    /*查找数据库
     async login (email, pwd){
 
         //验证用户名和密码
@@ -13,10 +14,16 @@ module.exports = {
 
         //判断密码
         let p = u.pwd;
-        /*
-            if( p == pwd ){}
+        if( p == pwd ){}
             something to code
-        */
         return 1;
     }
+    */
+
+    //这里方便演示直接返回1
+    login (email, pwd){
+
+        return 1;
+    }
+
 }

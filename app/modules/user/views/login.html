@@ -20,7 +20,9 @@
         <input type="hidden" id="_csrf" name="_csrf" value="{{csrfToken}}">
         <button type="button" class="btn btn-default" id="btnLogin">Sign in</button>
 </div>
-<script src="/js/jquery.min.js"></script>
+{% endblock %}
+
+{% block footer %}
 <script>
     $(function(){
         $("#btnLogin").click(function(){
@@ -30,7 +32,7 @@
             }
             $.ajax({
                 "method":"POST",
-                "url": "/user/loginsrv",
+                "url": "{{BaseUrl}}user/loginsrv",
                 "beforeSend": function (XMLHttpRequest) {
                     XMLHttpRequest.setRequestHeader('csrf-token', $("#_csrf").val());
                 },
@@ -40,7 +42,7 @@
                 },
                 "success":function(data){
                     if( data == 1 ){
-                        location.href="/user/my.html"
+                        location.href="{{BaseUrl}}user/my.html"
                     }else{
                         alert('Incorrect username or password!')
                     }
@@ -52,5 +54,4 @@
             })
         })
     })
-</script>
-{% endblock %}
+</script>{% endblock %}

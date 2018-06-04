@@ -32,7 +32,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li{%if not navpos%} class="active"{%endif%}>
-                        <a href="/index.html">Index
+                        <a href="{{BaseUrl}}index.html">Index
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -112,9 +112,9 @@
             rendered.innerHTML = html;
     </script>
     {%endif%}
-    {% block footer %}{% endblock %}
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block footer %}{% endblock %}
 </body>
 
 </html>

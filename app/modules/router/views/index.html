@@ -69,7 +69,7 @@ exports.routers = [
     action[0] 元素中指定为字符串，表示执行单个方法，执行Controller1中的one方法
     action[1] 指定为数组，表示执行Controller2控制器里多个方法,原理与上面的多action相同
 
-**DEMO:** [单控制器多Action](/ctrl/multiAction.html?p=one) | [多控制器多Action](/ctrl/multiCtrlAction.html?p=one)
+**DEMO:** [单控制器多Action](../ctrl/multiAction.html?p=one) | [多控制器多Action](../ctrl/multiCtrlAction.html?p=one)
 
 ### 过滤器
 - 过滤器可以在路由访问前被优先执行，可起到拦截的作用，比如在用户模块，我们需要指定哪些路由需要登录后才可以访问
@@ -109,7 +109,7 @@ exports.routers = [
     - \* 表示该模块下的所有路由都先进入该过滤，不需要额外指定filter
 - **handler**: 指定要执行的函数
 
-**DEMO:** [我的页面](/user/my.html)
+**DEMO:** [我的页面](../user/my.html)
 如果未登录，则会重定向到 login.html
 ***
 

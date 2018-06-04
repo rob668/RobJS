@@ -9,14 +9,14 @@ class Config{
         this.debug = false;
 
         //数据库连接配置
-        this.database = {
-            "host": "127.0.0.1",
-            "port": "3306",
-            "database": "test",
-            "username": "root",
-            "password": "root",
-            "dialect": "mysql"
-        };
+        // this.database = {
+        //     "host": "127.0.0.1",
+        //     "port": "3306",
+        //     "database": "test",
+        //     "username": "root",
+        //     "password": "root",
+        //     "dialect": "mysql"
+        // };
 
         //配置session_store
         this.session_store = {
@@ -31,25 +31,25 @@ class Config{
         this.BaseUrl = "/"
 
         //配置日志信息
-        //this.log4js = false //不需要日志
-        this.log4js = {
-            appenders: {
-                out: {
-                    type: 'stdout'
-                },
-                app: {
-                    type: "dateFile",
-                    filename: 'logs/log',
-                    pattern: "_yyyyMMdd.log",
-                    alwaysIncludePattern: true,
-                    maxLogSize: 20480,
-                    backups: 3,
-                }
-            },
-            categories: {
-                default: { appenders: ['out','app'], level: 'info' }
-            }
-        }
+        this.log4js = false //不需要日志
+        // this.log4js = {
+        //     appenders: {
+        //         out: {
+        //             type: 'stdout'
+        //         },
+        //         app: {
+        //             type: "dateFile",
+        //             filename: 'logs/log',
+        //             pattern: "_yyyyMMdd.log",
+        //             alwaysIncludePattern: true,
+        //             maxLogSize: 20480,
+        //             backups: 3,
+        //         }
+        //     },
+        //     categories: {
+        //         default: { appenders: ['out','app'], level: 'info' }
+        //     }
+        // }
     }
 }
 
