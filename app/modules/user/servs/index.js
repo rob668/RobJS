@@ -22,7 +22,6 @@ module.exports = {
 
     //这里方便演示直接返回1
     login (email, pwd){
-
         return 1;
     }
 

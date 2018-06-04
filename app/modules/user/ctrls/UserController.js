@@ -4,7 +4,7 @@ module.exports = {
 
     login (req, res) {
         if(req.session.loginUser){
-            res.redirect('/user/my.html')
+            res.redirect('my.html')
         }
         else {
             res.render('login')

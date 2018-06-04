@@ -41,7 +41,7 @@
                     "pwd":$("#txtpsw").val()
                 },
                 "success":function(data){
-                    if( data == 1 ){
+                    if( data.status == 1 ){
                         location.href="{{BaseUrl}}user/my.html"
                     }else{
                         alert('Incorrect username or password!')
